@@ -1,0 +1,5 @@
+.vs
+/node_modules
+/Test
+/package-lock.json
+/package.json
