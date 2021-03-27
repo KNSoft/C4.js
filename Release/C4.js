@@ -71,6 +71,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Date_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
 /* harmony import */ var _Date_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_Date_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _HTMLElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _HTMLAnchorElement_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
+
 
 
 
@@ -81,7 +83,7 @@ __webpack_require__.r(__webpack_exports__);
 /* 5 */
 /***/ (() => {
 
-Array.prototype.Each = HTMLCollection.prototype.Each = function (func) {
+Array.prototype.Each = HTMLCollection.prototype.Each = NodeList.prototype.Each = function (func) {
     for (var i = 0; i < this.length; i++)
         if (func(this[i], i) === false)
             break;
@@ -188,7 +190,9 @@ Date.prototype.ToDTLString = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Load_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
-/* harmony import */ var _SPA_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _VDOM_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _SPA_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+
 
 
 
@@ -245,7 +249,7 @@ HTMLElement.prototype.Load = function (opt) {
 };
 
 HTMLElement.prototype.AppendChild = function (opt) {
-    return this.appendChild(C4.VDOM(opt));
+    return this.appendChild((0,_VDOM_js__WEBPACK_IMPORTED_MODULE_1__.default)(opt));
 }
 
 /***/ }),
@@ -408,13 +412,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var SPA = {
-    /*
-        TODO
-    */
+/*
+    opt = {
+        Type: 'div',            // Tag name of new element, lowercase is recommended
+        Props: {                // Optional, properties of new element
+            innerHTML: 'Text',
+            style: {
+                color: '#F00'
+            }
+        },
+        Children: [
+            {             // Optional, child nodes of new element
+                Type: 'span'
+            }
+        ]
+    }
+*/
+
+var VDOM = function (opt) {
+    var VNODE = document.createElement(opt.Type);
+    if (opt.Props)
+        VNODE.Attr(opt.Props);
+    if (opt.Children)
+        for (var i = 0; i < opt.Children.length; i++)
+            VNODE.appendChild(VDOM(opt.Children[i]));
+    return VNODE;
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SPA);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VDOM);
 
 /***/ }),
 /* 13 */
@@ -425,7 +450,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _css_Main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+var SPA = {
+    ATagRespond: function (e) {
+        C4(e.currentTarget.getAttribute('data-target')).Load({
+            URL: e.currentTarget.getAttribute('href')
+        });
+        return false;
+    },
+    SetATag: function (aTag) {
+        aTag.onclick = this.ATagRespond;
+    }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SPA);
+
+/***/ }),
+/* 14 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SPA_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+
+
+HTMLAnchorElement.prototype.SetSPA = function () {
+    _SPA_js__WEBPACK_IMPORTED_MODULE_0__.default.SetATag(this);
+};
+
+/***/ }),
+/* 15 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_Main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
 
 
 var CSS = {
@@ -439,7 +500,7 @@ var CSS = {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CSS);
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -447,11 +508,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Unified_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Common_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Frame_Main_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(18);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Unified_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Common_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Frame_Main_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 // Imports
 
 
@@ -468,7 +529,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, "", ""]);
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ ((module) => {
 
 "use strict";
@@ -568,46 +629,6 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 16 */
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
-// Imports
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(false);
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*\r\n * Unified.css: 为文档和各标签提供统一的样式\r\n *\t1.\t统一的字体、字体大小、盒模型\r\n *\t2.\t不同浏览器下一致的显示\r\n *\t3.\t统一地变更个别元素原有样式\r\n */\r\n\r\n\r\n/* 全局样式 */\r\n\r\n* {\r\n\tbox-sizing: border-box;\r\n}\r\n\r\nbody {\r\n\tmargin: 0;\r\n\tfont-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\r\n\tline-height: 1.5;\r\n}\r\n\r\n\r\n/* 表单控件样式 */\r\n\r\ninput, select, textarea, button {\r\n\tfont-family: inherit;\r\n\tfont-size: inherit;\r\n\tline-height: 1.5;\r\n\toutline: none;\r\n\tpadding: .375rem;\r\n\tborder: 1px solid #000;\r\n}\r\n\r\ninput, select {\r\n\theight: calc(2.25rem + 2px);\r\n}\r\n\r\ninput[type=checkbox], input[type=radio] {\r\n\tmargin: 0;\r\n\tpadding: 0;\r\n\theight: auto;\r\n\tborder: none;\r\n}\r\n\r\ninput[type=radio] {\r\n\tborder-radius: 50%;\r\n}\r\n\r\ninput[type=submit]:not(:disabled), button {\r\n\tcursor: pointer;\r\n\tbackground-color: #DDD;\r\n}\r\n\r\nlabel {\r\n\tdisplay: -ms-inline-flexbox;\r\n\tdisplay: inline-flex;\r\n\t-ms-flex-align: center;\r\n\talign-items: center;\r\n}\r\n\r\ntextarea {\r\n\tresize: none;\r\n\toverflow-y: scroll;\r\n}\r\n\r\n:disabled {\r\n\tcursor: not-allowed;\r\n\tcolor: #6D6D6D;\r\n\tbackground-color: #E5E5E5;\r\n\tborder-color: #6D6D6D;\r\n}\r\n\r\n/* 其它标签 */\r\n\r\ntable {\r\n\tborder-collapse: collapse;\r\n\tborder-spacing: 0;\r\n}\r\n\r\ntable > tbody > tr > td {\r\n    padding: 0;\r\n}\r\n\r\na {\r\n\tcursor: pointer;\r\n}\r\n\r\nul {\r\n\tmargin: 0;\r\n}", ""]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-/* 17 */
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
-// Imports
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(false);
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "", ""]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
 /* 18 */
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
@@ -616,7 +637,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(false);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "/*\r\n * Unified.css: 为文档和各标签提供统一的样式\r\n *\t1.\t统一的字体、字体大小、盒模型\r\n *\t2.\t不同浏览器下一致的显示\r\n *\t3.\t统一地变更个别元素原有样式\r\n */\r\n\r\n\r\n/* 全局样式 */\r\n\r\n* {\r\n\tbox-sizing: border-box;\r\n}\r\n\r\nbody {\r\n\tmargin: 0;\r\n\tfont-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\r\n\tline-height: 1.5;\r\n}\r\n\r\n\r\n/* 表单控件样式 */\r\n\r\ninput, select, textarea, button {\r\n\tfont-family: inherit;\r\n\tfont-size: inherit;\r\n\tline-height: 1.5;\r\n\toutline: none;\r\n\tpadding: .375rem;\r\n\tborder: 1px solid #000;\r\n}\r\n\r\ninput, select {\r\n\theight: calc(2.25rem + 2px);\r\n}\r\n\r\ninput[type=checkbox], input[type=radio] {\r\n\tmargin: 0;\r\n\tpadding: 0;\r\n\theight: auto;\r\n\tborder: none;\r\n}\r\n\r\ninput[type=radio] {\r\n\tborder-radius: 50%;\r\n}\r\n\r\ninput[type=submit]:not(:disabled), button {\r\n\tcursor: pointer;\r\n\tbackground-color: #DDD;\r\n}\r\n\r\nlabel {\r\n\tdisplay: -ms-inline-flexbox;\r\n\tdisplay: inline-flex;\r\n\t-ms-flex-align: center;\r\n\talign-items: center;\r\n}\r\n\r\ntextarea {\r\n\tresize: none;\r\n\toverflow-y: scroll;\r\n}\r\n\r\n:disabled {\r\n\tcursor: not-allowed;\r\n\tcolor: #6D6D6D;\r\n\tbackground-color: #E5E5E5;\r\n\tborder-color: #6D6D6D;\r\n}\r\n\r\n/* 其它标签 */\r\n\r\ntable {\r\n\tborder-collapse: collapse;\r\n\tborder-spacing: 0;\r\n}\r\n\r\ntable > tbody > tr > td {\r\n    padding: 0;\r\n}\r\n\r\na {\r\n\tcolor: inherit;\r\n\tcursor: pointer;\r\n}\r\n\r\nul {\r\n\tmargin: 0;\r\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+/* 19 */
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(false);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".d-block {\r\n    display: block;\r\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+/* 20 */
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
 // Imports
 
@@ -628,7 +689,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, "", ""]);
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -671,45 +732,7 @@ var Cookie = {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Cookie);
 
 /***/ }),
-/* 20 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/*
-    opt = {
-        Type: 'div',            // Tag name of new element, lowercase is recommended
-        Props: {                // Optional, properties of new element
-            innerHTML: 'Text',
-            style: {
-                color: '#F00'
-            }
-        },
-        Children: [
-            {             // Optional, child nodes of new element
-                Type: 'span'
-            }
-        ]
-    }
-*/
-
-var VDOM = function (opt) {
-    var VNODE = document.createElement(opt.Type);
-    if (opt.Props)
-        VNODE.Attr(opt.Props);
-    if (opt.Children)
-        for (var i = 0; i < opt.Children.length; i++)
-            VNODE.appendChild(VDOM(opt.Children[i]));
-    return VNODE;
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VDOM);
-
-/***/ }),
-/* 21 */
+/* 22 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -794,6 +817,61 @@ var API = {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (API);
 
+/***/ }),
+/* 23 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Load_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+
+
+var I18N = {
+    Init: function (opt) {
+        var str;
+        if (opt.Lang && opt.SupportLang.indexOf(opt.Lang) !== -1)
+            this.Lang = opt.Lang;
+        else {
+            for (var i = 0; i < opt.SupportLang.length; i++)
+                if (navigator.language.indexOf(opt.SupportLang[i]) !== -1) {
+                    this.Lang = opt.SupportLang[i];
+                    break;
+                }
+            if (this.Lang === undefined) {
+                str = navigator.language.substring(0, navigator.language.indexOf('-'));
+                for (var i = 0; i < opt.SupportLang.length; i++)
+                    if (opt.SupportLang[i].indexOf(str) !== -1) {
+                        this.Lang = opt.SupportLang[i];
+                        break;
+                    }
+            }
+            if (this.Lang === undefined)
+                this.Lang = opt.SupportLang[0];
+            else
+                this.DefLang = opt.SupportLang[0];
+        }
+    },
+    Load: function (opt) {
+        var _I18N = this;
+        return _Load_js__WEBPACK_IMPORTED_MODULE_0__.default.JSON({
+            URL: opt.Dir + _I18N.Lang + '.json',
+            OnSuccess: opt.OnSuccess,
+            OnError: function (xhr) {
+                if (xhr.status === 404 && _I18N.DefLang && _I18N.DefLang !== _I18N.Lang)
+                    _Load_js__WEBPACK_IMPORTED_MODULE_0__.default.JSON({
+                        URL: opt.Dir + _I18N.DefLang + '.json',
+                        OnSuccess: obj.OnSuccess
+                    });
+            }
+        });
+    }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (I18N);
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -873,13 +951,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Polyfill_Main_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _NativeExt_Main_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _CSS_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
-/* harmony import */ var _Cookie_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
-/* harmony import */ var _VDOM_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
+/* harmony import */ var _CSS_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _Cookie_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _VDOM_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
 /* harmony import */ var _AJAX_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
 /* harmony import */ var _Load_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
-/* harmony import */ var _API_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(21);
-/* harmony import */ var _SPA_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(12);
+/* harmony import */ var _API_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(22);
+/* harmony import */ var _SPA_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(13);
+/* harmony import */ var _I18N_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(23);
+
 
 
 
@@ -901,6 +981,7 @@ C4.AJAX = _AJAX_js__WEBPACK_IMPORTED_MODULE_5__.default;
 C4.Load = _Load_js__WEBPACK_IMPORTED_MODULE_6__.default;
 C4.API = _API_js__WEBPACK_IMPORTED_MODULE_7__.default;
 C4.SPA = _SPA_js__WEBPACK_IMPORTED_MODULE_8__.default;
+C4.I18N = _I18N_js__WEBPACK_IMPORTED_MODULE_9__.default;
 
 window.C4 = C4;
 

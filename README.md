@@ -14,7 +14,7 @@ C4.js has following modules provide different features and functions:
 | Module        | Feature                                                           |
 |---------------|-------------------------------------------------------------------|
 | AJAX          | Sends XMLHttpRequest                                              |
-| Cookie        | Handles cookies                                                   |
+| Cookie        | Accesses cookies                                                  |
 | CSS           | Handles CSS and apply default CSS provided by C4.js               |
 
 ### Advanced Features

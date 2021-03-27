@@ -81,6 +81,7 @@ table > tbody > tr > td {
 }
 
 a {
+	color: inherit;
 	cursor: pointer;
 }
 

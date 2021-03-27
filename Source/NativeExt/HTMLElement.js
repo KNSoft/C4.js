@@ -1,4 +1,5 @@
 import Load from '../Load.js';
+import VDOM from '../VDOM.js'
 import SPA from '../SPA.js';
 
 HTMLElement.prototype.HasClass = function (name) {
@@ -54,5 +55,5 @@ HTMLElement.prototype.Load = function (opt) {
 };
 
 HTMLElement.prototype.AppendChild = function (opt) {
-    return this.appendChild(C4.VDOM(opt));
+    return this.appendChild(VDOM(opt));
 }
