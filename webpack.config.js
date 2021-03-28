@@ -7,6 +7,7 @@ module.exports = [{
         path: path.resolve(__dirname, 'Release'),
         filename: 'C4.min.js'
     },
+    target: ['web', 'es5'],
     name: 'Prod',
     module: {
         rules: [
@@ -23,6 +24,7 @@ module.exports = [{
         path: path.resolve(__dirname, 'Release'),
         filename: 'C4.js'
     },
+    target: ['web', 'es5'],
     name: 'Dev',
     module: {
         rules: [

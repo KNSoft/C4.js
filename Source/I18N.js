@@ -6,13 +6,14 @@ var I18N = {
         if (opt.Lang && opt.SupportLang.indexOf(opt.Lang) !== -1)
             this.Lang = opt.Lang;
         else {
+            var browserLang = navigator.language || navigator.browserLanguage;
             for (var i = 0; i < opt.SupportLang.length; i++)
-                if (navigator.language.indexOf(opt.SupportLang[i]) !== -1) {
+                if (browserLang.indexOf(opt.SupportLang[i]) !== -1) {
                     this.Lang = opt.SupportLang[i];
                     break;
                 }
             if (this.Lang === undefined) {
-                str = navigator.language.substring(0, navigator.language.indexOf('-'));
+                str = browserLang.substring(0, browserLang.indexOf('-'));
                 for (var i = 0; i < opt.SupportLang.length; i++)
                     if (opt.SupportLang[i].indexOf(str) !== -1) {
                         this.Lang = opt.SupportLang[i];
