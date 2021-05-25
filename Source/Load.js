@@ -48,12 +48,12 @@ Load.CSS = function (opt) {
     return AJAX(newOpt);
 };
 
-Load.HTML = function (opt) {
+Load.HTML = function (opt, target) {
     var newOpt = opt.Clone();
     newOpt.OnSuccess = function (xhr) {
-        if (opt.Target) {
-            opt.Target.innerHTML = xhr.responseText;
-            opt.Target.ReloadScript();
+        if (target) {
+            target.innerHTML = xhr.responseText;
+            target.ReloadScript();
         }
         if (opt.OnSuccess)
             opt.OnSuccess(xhr.responseText);

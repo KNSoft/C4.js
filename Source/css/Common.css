@@ -1,3 +1,11 @@
+.ta-center {
+    text-align: center;
+}
+
 .d-block {
     display: block;
+}
+
+.va-middle > * {
+    vertical-align: middle;
 }

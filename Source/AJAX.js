@@ -25,8 +25,9 @@ var AJAX = function (opt) {
     } else if (opt.Method === 'POST')
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     if (opt.Headers)
-        for (var prop in opt)
-            xhr.setRequestHeader(prop, opt.Headers[prop]);
+        for (var prop in opt.Headers)
+            if (Object.prototype.hasOwnProperty.call(opt.Headers, prop))
+                xhr.setRequestHeader(prop, opt.Headers[prop]);
     if (opt.Timeout)
         setTimeout(function () {
             if (xhr.readyState !== 4) {

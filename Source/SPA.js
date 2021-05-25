@@ -1,12 +1,18 @@
 var SPA = {
-    ATagRespond: function (e) {
-        C4(e.currentTarget.getAttribute('data-target')).Load({
-            URL: e.currentTarget.getAttribute('href')
-        });
+    ResolveRouter: function (routerPath) {
+        var path = window.location.pathname;
+        if (path[path.length - 1] != '/')
+            path += '/';
+        if (path.indexOf(routerPath) == 0) {
+            path = path.substr(routerPath.length);
+            return path;
+        }
+    },
+    ATagRouterHandler: function (e) {
         return false;
     },
-    SetATag: function (aTag) {
-        aTag.onclick = this.ATagRespond;
+    SetRouter: function (aTag) {
+        aTag.onclick = this.ATagRouterHandler;
     }
 };
 

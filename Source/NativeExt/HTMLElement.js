@@ -48,10 +48,8 @@ HTMLElement.prototype.ReloadScript = function () {
     }
 };
 
-HTMLElement.prototype.Load = function (opt) {
-    var newOpt = opt.Clone();
-    newOpt.Target = this;
-    Load.HTML(newOpt);
+HTMLElement.prototype.Partial = function (opt) {
+    Load.HTML(opt, this);
 };
 
 HTMLElement.prototype.AppendChild = function (opt) {
