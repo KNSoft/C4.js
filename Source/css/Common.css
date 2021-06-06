@@ -2,10 +2,18 @@
     text-align: center;
 }
 
+.ta-right {
+    text-align: right;
+}
+
 .d-block {
     display: block;
 }
 
 .va-middle > * {
     vertical-align: middle;
+}
+
+.fw-bold {
+    font-weight: bold;
 }

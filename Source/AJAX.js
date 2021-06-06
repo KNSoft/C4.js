@@ -17,7 +17,13 @@
 */
 
 var AJAX = function (opt) {
-    var xhr = new XMLHttpRequest(), total = 0;
+    var xhr = new XMLHttpRequest();
+    var pace = {
+        xhr: xhr,
+        total: 0,
+        loaded: 0
+    };
+    AJAX.Pace.Add(pace);
     xhr.open(opt.Method || 'GET', opt.URL, opt.Async !== false);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     if (opt.File) {
@@ -50,18 +56,53 @@ var AJAX = function (opt) {
                 opt.OnError('HTTP', xhr.status, xhr.statusText);
         }
     };
-    if (opt.OnProgress) {
-        xhr.onprogress = function (e) {
-            total = e.total;
+    xhr.onprogress = function (e) {
+        if (opt.OnProgress)
             opt.OnProgress(e.loaded, e.total);
-        };
-    }
+        if (AJAX.Pace.Callback) {
+            pace.total = e.total;
+            pace.loaded = e.loaded;
+            AJAX.Pace.Update();
+        }
+    };
     try {
         xhr.send(opt.Body);
     } catch (e) {
         opt.OnError(e.name, e.number, e.message);
     }
     return xhr;
+};
+
+AJAX.Pace = {
+    /*
+        paceObj = {
+            xhr: xhr,   // XMLHttpRequest object
+            total: 0,   // Total bytes in progress
+            loaded: 0   // Loaded bytes in progress
+        }
+    */
+    Queue: [],
+    Callback: null,
+    Add: function (pace) {
+        if (this.Callback)
+            this.Queue.push(pace);
+    },
+    PrevUpdatedPace: null,
+    Update: function () {
+        if (this.Callback) {
+            var pace = this.Queue[0];
+            while (pace) {
+                if (pace.xhr.readyState > 3) {
+                    this.Queue.splice(0, 1);
+                    pace = this.Queue[0];
+                    continue;
+                }
+                this.Callback(pace.loaded, pace.total, pace != this.PrevUpdatedPace);
+                this.PrevUpdatedPace = pace;
+                break;
+            }
+        }
+    }
 };
 
 export default AJAX;
