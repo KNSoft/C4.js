@@ -16,4 +16,8 @@ var SPA = {
     }
 };
 
+HTMLAnchorElement.prototype.SetSPARouter = function () {
+    SPA.SetRouter(this);
+};
+
 export default SPA;

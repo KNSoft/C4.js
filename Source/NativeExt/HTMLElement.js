@@ -1,6 +1,5 @@
 import Load from '../Load.js';
-import VDOM from '../VDOM.js'
-import SPA from '../SPA.js';
+import VDOM from '../VDOM.js';
 
 HTMLElement.prototype.HasClass = function (name) {
     var classes = this.className.split(' ');

@@ -27,19 +27,38 @@ var I18N = {
         }
     },
     Load: function (opt) {
-        var _I18N = this;
         return Load.JSON({
-            URL: opt.Dir + _I18N.Lang + '.json',
+            URL: opt.Dir + I18N.Lang + '.json',
             OnSuccess: opt.OnSuccess,
-            OnError: function (xhr) {
-                if (xhr.status === 404 && _I18N.DefLang && _I18N.DefLang !== _I18N.Lang)
+            OnError: function (errName, errNum, errMsg) {
+                if (errName === 'HTTP' && errNum == 404 && I18N.DefLang && I18N.DefLang !== I18N.Lang)
                     Load.JSON({
-                        URL: opt.Dir + _I18N.DefLang + '.json',
-                        OnSuccess: obj.OnSuccess
+                        URL: opt.Dir + I18N.DefLang + '.json',
+                        OnSuccess: opt.OnSuccess,
+                        OnError: opt.OnError
                     });
+                else if (opt.OnError)
+                    opt.OnError(errName, errNum, errMsg)
             }
         });
+    },
+    Apply: function (ele, obj) {
+        var key = ele.getAttribute('data-i18n');
+        if (key)
+            ele.innerHTML = obj[key];
+        else {
+            var eles = ele.getElementsByClassName('c4-i18n');
+            for (var i = 0; i < eles.length; i++) {
+                key = eles[i].getAttribute('data-i18n') || eles[i]['data-i18n'] || eles[i].id;
+                if (key && obj[key])
+                    eles[i].innerHTML = obj[key];
+            }
+        }
     }
 };
+
+HTMLElement.prototype.I18N = function (obj) {
+    I18N.Apply(this, obj);
+}
 
 export default I18N;

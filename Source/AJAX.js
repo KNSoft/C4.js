@@ -60,9 +60,11 @@ var AJAX = function (opt) {
         if (opt.OnProgress)
             opt.OnProgress(e.loaded, e.total);
         if (AJAX.Pace.Callback) {
-            pace.total = e.total;
-            pace.loaded = e.loaded;
-            AJAX.Pace.Update();
+            pace.total = e.total || Number(xhr.getResponseHeader('Content-Length'));
+            if (pace.total) {
+                pace.loaded = e.loaded;
+                AJAX.Pace.Update();
+            }
         }
     };
     try {
