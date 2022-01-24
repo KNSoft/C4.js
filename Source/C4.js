@@ -8,8 +8,9 @@ import Load from './Load.js';
 import API from './API.js';
 import SPA from './SPA.js';
 import I18N from './I18N.js';
+import CTL from './CTL.js';
 
-var C4 = function (id) {
+var C4 = function(id) {
     return document.getElementById(id);
 };
 
@@ -21,6 +22,7 @@ C4.Load = Load;
 C4.API = API;
 C4.SPA = SPA;
 C4.I18N = I18N;
+C4.CTL = CTL;
 
 window.C4 = C4;
 

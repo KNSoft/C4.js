@@ -7,6 +7,7 @@
             'X-MyHeader': 'MyHeader'
         },
         Timeout: 5000,                              // Optional, timeout for the request, in milliseconds
+        OnTimeout: function (xhr) {...},            // Optional, callback for timeout
         OnChange: function (xhr) {...},             // Optional, callback for ready state changed
         OnComplete: function (xhr) {...},           // Optional, callback for request completed
         OnSuccess: function (xhr) {...},            // Optional, callback for request succeeded

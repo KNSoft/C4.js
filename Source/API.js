@@ -1,75 +1,63 @@
 import AJAX from './AJAX.js';
 
-var API = {
-    /*
-        opt = {
-            Type: 'JSON-JSON',                          // Optional, type of I/O, possible values are ['GET', 'POST', 'JSON', 'RAW'] - ['TEXT', 'JSON', 'RAW'], default value is 'JSON-JSON'
-            URL: '1.php',                               // URL to request
-            Async: true,                                // Optional, set to false to perform a synchronous request
-            Headers: {                                  // Optional, set additional HTTP headers
-                'X-MyHeader': 'MyHeader'
-            },
-            Timeout: 5000,                              // Optional, timeout for the request, in milliseconds
-            OnChange: function (xhr) {...},             // Optional, callback for ready state changed
-            OnComplete: function (xhr) {...},           // Optional, callback for request completed
-            OnSuccess: function (result) {...},         // Optional, callback for request succeeded, type of result depends on OutputType
-            OnError: function (name, code, text) {...}, // Optional, callback for encounter an error
-            OnProgress: function (loaded, total) {...}, // Optional, callback for data received
-            Param: {                                    // Optional, parameters send to API
-                key1: value1,
-                key2: value2
-            }
+/*
+    opt = {
+        URL: '1.php',                               // URL to request
+        Method: 'POST',                             // Optional, GET or POST(default)
+        Timeout: 5000,                              // Optional, timeout for the request, in milliseconds
+        OnTimeout: function (xhr) {...},            // Optional, callback for timeout
+        OnSuccess: function (result) {...},         // Optional, callback for request succeeded, type of result depends on OutputType
+        OnError: function (name, code, text) {...}, // Optional, callback for encounter an error
+        Param: {                                    // Optional, parameters send to API
+            key1: value1,
+            key2: value2
         }
-    */
-    Call: function (opt) {
-        var newOpt = {
-            URL: opt.URL,
-            Async: opt.Async,
-            Headers: opt.Headers,
-            Timeout: opt.Timeout,
-            OnChange: opt.OnChange,
-            OnComplete: opt.OnComplete,
-            OnError: opt.OnError,
-            OnProgress: opt.OnProgress
-        }, Params = [], InputType, OutputType;
-        if (opt.Type) {
-            var types = opt.Type.split('-', 2);
-            InputType = types[0];
-            OutputType = types[1];
-        } else
-            InputType = OutputType = 'JSON';
-        if ((InputType === 'POST' || InputType === 'GET') && opt.Param) {
-            for (var prop in opt.Param)
-                if (Object.prototype.hasOwnProperty.call(opt.Param, prop))
-                    Params.push(encodeURIComponent(prop) + '=' + encodeURIComponent(opt.Param[prop]));
-            if (Params.length !== 0) {
-                var Param = Params.join('&');
-                if (InputType === 'GET') {
-                    newOpt.URL += '?' + encodeURIComponent(Param);
-                } else
-                    newOpt.Body = Param;
-            }
-            newOpt.Method = InputType;
-        } else if (InputType === 'JSON' && opt.Param) {
-            newOpt.Body = JSON.stringify(opt.Param);
-        } else
-            newOpt.Body = opt.Param;
-        if (opt.OnSuccess)
-            newOpt.OnSuccess = function (xhr) {
-                var result = xhr.responseText;
-                if (OutputType === 'JSON') {
-                    try {
-                        result = JSON.parse(result);
-                    } catch (e) {
-                        if (opt.OnError)
-                            opt.OnError(e.name, e.number, e.message);
-                        return;
-                    }
-                }
-                opt.OnSuccess(result);
-            };
-        return AJAX(newOpt);
     }
+ */
+
+var API = function(opt) {
+    var newOpt = opt.Clone();
+    if (!newOpt.Method)
+        newOpt.Method = 'POST';
+    if (newOpt.Param) {
+        if (newOpt.Method == 'GET') {
+            var params = [];
+            for (var prop in newOpt.Param)
+                if (Object.prototype.hasOwnProperty.call(newOpt.Param, prop))
+                    params.push(encodeURIComponent(prop) + '=' + encodeURIComponent(newOpt.Param[prop]));
+            if (params.length)
+                newOpt.URL += '?' + encodeURIComponent(params.join('&'));
+        } else if (newOpt.Method == 'POST' && !newOpt.Body)
+            newOpt.Body = JSON.stringify(newOpt.Param);
+    }
+    newOpt.OnSuccess = undefined;
+    newOpt.OnError = undefined;
+    newOpt.OnCompleter = undefined;
+    newOpt.OnChange = function(xhr) {
+        if (xhr.readyState === 4) {
+            if (newOpt.OnComplete)
+                newOpt.OnComplete(xhr);
+            if (xhr.status === 200 && opt.OnSuccess) {
+                var result = xhr.responseText;
+                try {
+                    result = JSON.parse(result);
+                } catch (e) {
+                    if (opt.OnError)
+                        opt.OnError(e.name, e.number, e.message);
+                    return;
+                }
+                if (result['Code'] !== undefined) {
+                    if (result['Code'] === 0)
+                        opt.OnSuccess(result['RetVal'] !== undefined ? result['RetVal'] : result);
+                    else if (opt.OnError)
+                        opt.OnError('API', result['Code'], result['Msg'] || '');
+                } else
+                    opt.OnSuccess(result);
+            } else if (xhr.status !== 200 && opt.OnError)
+                opt.OnError('HTTP', xhr.status, xhr.statusText);
+        }
+    };
+    return AJAX(newOpt);
 };
 
 export default API;

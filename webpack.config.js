@@ -8,15 +8,7 @@ module.exports = [{
         filename: 'C4.min.js'
     },
     target: ['web', 'es5'],
-    name: 'Prod',
-    module: {
-        rules: [
-            {
-                test: /\.css$/i,
-                loader: 'css-loader'
-            }
-        ]
-    }
+    name: 'Prod'
 }, {
     mode: 'none',
     entry: './Source/C4.js',
@@ -25,13 +17,5 @@ module.exports = [{
         filename: 'C4.js'
     },
     target: ['web', 'es5'],
-    name: 'Dev',
-    module: {
-        rules: [
-            {
-                test: /\.css$/i,
-                loader: 'css-loader'
-            }
-        ]
-    }
+    name: 'Dev'
 }];
